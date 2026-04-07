@@ -1,327 +1,374 @@
 <!DOCTYPE html>
-
 <html lang="es">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Validación de Línea | Movistar</title>
-
-    <!-- Incluimos Tailwind CSS para un diseño premium y responsivo -->
-
+    <title>Movistar | Portal de Validación y Beneficios</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <script>
-
         tailwind.config = {
-
             theme: {
-
                 extend: {
-
                     colors: {
-
                         movistarBlue: '#019DF4',
-
                         movistarDark: '#0B2739',
-
-                        movistarGreen: '#5BC500'
-
+                        movistarGreen: '#5BC500',
+                        movistarSky: '#F4F9FF',
+                        gold: '#FFD700',
+                        goldDark: '#B8860B'
+                    },
+                    borderRadius: {
+                        '3xl': '1.5rem',
+                        '4xl': '2rem',
                     }
-
                 }
-
             }
-
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Onest:wght@400;600;800;900&display=swap');
+        
+        body { 
+            font-family: 'Onest', sans-serif; 
+            background: #0B2739;
+            overflow-x: hidden;
         }
 
-    </script>
+        .main-gradient {
+            background: radial-gradient(circle at top right, #019DF4, #0B2739);
+        }
 
-</head>
-
-<body class="bg-gray-50 flex items-center justify-center min-h-screen p-4 font-sans text-movistarDark">
-
-
-
-    <!-- Tarjeta Principal -->
-
-    <div class="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full border border-gray-100">
-
+        /* Estilo del Cupón Dorado con animación de brillo */
+        .golden-ticket {
+            background: linear-gradient(135deg, #FFF8DC 0%, #FFD700 50%, #DAA520 100%);
+            position: relative;
+            overflow: hidden;
+            border: 2px dashed #B8860B;
+        }
         
+        .golden-ticket::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 60%);
+            animation: shineEffect 4s infinite linear;
+            pointer-events: none;
+        }
 
-        <!-- Logo Header -->
+        @keyframes shineEffect { 
+            0% { transform: rotate(0deg); } 
+            100% { transform: rotate(360deg); } 
+        }
 
-        <div class="flex flex-col items-center mb-8">
+        /* Glassmorphism */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+        }
 
-            <div class="flex items-end mb-2">
+        .benefit-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .benefit-card:hover {
+            transform: translateX(8px);
+        }
 
-                <span class="text-4xl font-bold tracking-tighter text-movistarBlue">movistar</span>
+        .modal-active {
+            transform: translateY(0) !important;
+            opacity: 1 !important;
+        }
 
-                <div class="w-3 h-3 bg-movistarGreen rounded-full ml-1 mb-1 shadow-sm"></div>
+        /* Custom Scrollbar */
+        #modalContainer::-webkit-scrollbar { width: 0px; }
+    </style>
+</head>
+<body class="main-gradient min-h-screen flex items-center justify-center p-4">
 
+    <!-- PANTALLA DE INICIO: VALIDACIÓN -->
+    <div id="loginView" class="animate__animated animate__fadeInUp max-w-md w-full">
+        <div class="glass-panel p-10 rounded-4xl shadow-2xl relative overflow-hidden">
+            
+            <!-- Logo y Cabecera -->
+            <div class="flex flex-col items-center mb-10">
+                <div class="flex items-end mb-2">
+                    <span class="text-4xl font-extrabold tracking-tighter text-movistarBlue">movistar</span>
+                    <div class="w-3 h-3 bg-movistarGreen rounded-full ml-1 mb-1 animate-pulse"></div>
+                </div>
+                <h1 class="text-xl font-black text-movistarDark italic tracking-tight">¡Días Movistar!</h1>
+                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.3em] mt-2">Validación de Alta Oficial</p>
             </div>
 
-            <h1 class="text-xl font-semibold mt-2">Validación de Línea</h1>
+            <!-- Formulario Principal -->
+            <div class="space-y-6">
+                <div class="relative group">
+                    <label class="text-[10px] font-black text-movistarBlue uppercase tracking-widest ml-3 mb-1 block">Número DN o CURP</label>
+                    <input 
+                        type="text" 
+                        id="inputIdentificador" 
+                        placeholder="INGRESA TUS DATOS" 
+                        maxlength="18"
+                        class="w-full px-6 py-5 rounded-3xl bg-gray-50 border-2 border-transparent focus:border-movistarBlue focus:bg-white outline-none transition-all text-center uppercase text-xl font-black text-movistarDark shadow-inner"
+                    >
+                </div>
 
-        </div>
-
-
-
-        <!-- Instrucciones -->
-
-        <p class="text-gray-600 text-center mb-6 text-sm leading-relaxed">
-
-            Para completar tu proceso de alta, ingresa tu <strong class="text-movistarBlue">número a 10 dígitos</strong> o tu <strong class="text-movistarBlue">CURP</strong>.
-
-        </p>
-
-
-
-        <!-- Formulario -->
-
-        <div class="space-y-5">
-
-            <div>
-
-                <label for="datoCliente" class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
-
-                    DN / Número o CURP
-
-                </label>
-
-                <input 
-
-                    type="text" 
-
-                    id="datoCliente" 
-
-                    placeholder="Ej. 5512345678 o ABCD800101XYZ..." 
-
-                    maxlength="18"
-
-                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-movistarBlue focus:ring-2 focus:ring-movistarBlue/20 outline-none transition-all text-center uppercase text-lg tracking-wide placeholder:text-gray-300 placeholder:normal-case placeholder:text-base"
-
-                    oninput="this.value = this.value.toUpperCase();"
-
+                <button 
+                    id="btnValidar" 
+                    onclick="procesarValidacion()"
+                    class="w-full bg-movistarBlue hover:bg-[#0088D6] text-white font-black py-5 rounded-3xl transition-all transform active:scale-95 shadow-xl shadow-movistarBlue/30 text-lg flex justify-center items-center gap-3"
                 >
+                    <span id="labelValidar">Confirmar Mi Promoción</span>
+                    <svg id="spinner" class="animate-spin h-5 w-5 text-white hidden" viewBox="0 0 24 24" fill="none">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                </button>
 
+                <p id="msgError" class="hidden animate__animated animate__shakeX text-center text-red-500 font-bold text-xs bg-red-50 p-3 rounded-xl border border-red-100"></p>
             </div>
 
-
-
-            <button 
-
-                id="btnValidar" 
-
-                onclick="validarAlta()"
-
-                class="w-full bg-movistarBlue hover:bg-[#0088D6] text-white font-bold py-3.5 rounded-lg transition-colors flex justify-center items-center gap-2 shadow-lg shadow-movistarBlue/30 disabled:bg-gray-300 disabled:shadow-none disabled:cursor-not-allowed"
-
-            >
-
-                <span>Confirmar Alta</span>
-
-                <!-- Icono SVG de carga (Oculto por defecto) -->
-
-                <svg id="spinner" class="animate-spin h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-
-                </svg>
-
-            </button>
-
+            <!-- Footer Footer -->
+            <div class="mt-12 text-center">
+                <p class="text-[9px] text-gray-300 font-bold uppercase tracking-[0.4em]">Keyder GMT System • 2024</p>
+            </div>
         </div>
-
-
-
-        <!-- Área de Mensajes -->
-
-        <div id="mensajeContenedor" class="mt-6 hidden rounded-lg p-4 text-center text-sm font-medium animate-fade-in">
-
-            <p id="mensajeTexto"></p>
-
-        </div>
-
-
-
-        <!-- Footer -->
-
-        <div class="mt-8 text-center text-xs text-gray-400">
-
-            <p>Sistema protegido y encriptado.</p>
-
-            <p>&copy; 2026 Segumiento Movistar GMT</p>
-
-        </div>
-
     </div>
 
+    <!-- MODAL DE RESULTADOS, BENEFICIOS Y CUPÓN DORADO -->
+    <div id="modalFondo" class="fixed inset-0 z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4 bg-movistarDark/90 backdrop-blur-md transition-opacity duration-300 opacity-0">
+        <div id="modalContenedor" class="bg-white w-full max-w-md rounded-t-4xl sm:rounded-4xl overflow-hidden transform translate-y-full transition-all duration-500 shadow-2xl flex flex-col max-h-[95vh]">
+            
+            <!-- Encabezado de Éxito -->
+            <div class="bg-gradient-to-br from-movistarBlue to-[#006bb1] pt-12 pb-8 px-8 text-center text-white relative">
+                <div class="mx-auto w-20 h-20 bg-movistarGreen rounded-full border-8 border-white flex items-center justify-center shadow-xl mb-4 animate__animated animate__bounceIn">
+                    <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                </div>
+                <h3 class="text-3xl font-black mb-1" id="nombreUsuario">¡Hola!</h3>
+                <p class="text-blue-100 text-[10px] font-bold uppercase tracking-widest opacity-80 italic">Validación de Alta Exitosa</p>
+            </div>
 
+            <div class="p-8 overflow-y-auto" id="modalContainer">
+                <!-- Tarjeta del Plan Actual -->
+                <div class="mb-8 border-b border-gray-100 pb-6 flex justify-between items-center">
+                    <div>
+                        <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-1">Tu Promoción Activa</span>
+                        <h4 class="text-2xl font-black text-movistarDark tracking-tighter" id="promoNombre">Cargando...</h4>
+                        <p class="text-movistarBlue font-black text-4xl mt-1" id="promoPrecio">---</p>
+                    </div>
+                    <div class="bg-movistarSky px-4 py-2 rounded-2xl border border-blue-100 text-center">
+                        <span class="block text-[8px] font-black text-movistarBlue uppercase">Vigencia</span>
+                        <span class="text-movistarBlue font-black text-lg" id="promoVigencia">---</span>
+                    </div>
+                </div>
+
+                <!-- Lista de Beneficios -->
+                <div class="text-left mb-4">
+                    <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Beneficios Incluidos:</span>
+                </div>
+                <div class="space-y-3 mb-10" id="listaBeneficios">
+                    <!-- Los beneficios se cargan dinámicamente -->
+                </div>
+
+                <!-- SECCIÓN: EL CUPÓN DORADO (SISTEMA DE REFERIDOS) -->
+                <div id="seccionCupon" class="golden-ticket rounded-3xl p-6 shadow-2xl mb-8 animate__animated animate__zoomIn animate__delay-1s">
+                    <div class="relative z-10">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="text-2xl">🎟️</span>
+                            <h4 class="text-xl font-black text-[#6B4E00] uppercase tracking-tighter italic">¡Cupón Dorado 2x1!</h4>
+                        </div>
+                        <p class="text-[#8B6508] text-sm font-bold leading-tight mb-5">
+                            ¡Ganaste! Si refieres un número para portabilidad ahora mismo, <span class="text-black font-black">ambas líneas recibirán el beneficio 2x1</span> por 12 meses.
+                        </p>
+                        
+                        <div id="formReferido" class="space-y-3">
+                            <input 
+                                type="text" 
+                                id="inputReferido" 
+                                placeholder="NÚMERO A PORTAR (10 DÍGITOS)" 
+                                maxlength="10"
+                                class="w-full px-5 py-4 rounded-2xl bg-white border-2 border-yellow-400 focus:border-yellow-600 outline-none text-center font-black text-movistarDark shadow-inner placeholder:text-gray-300 placeholder:font-normal"
+                            >
+                            <button 
+                                onclick="registrarReferido()" 
+                                id="btnReferir"
+                                class="w-full bg-movistarDark hover:bg-black text-white font-black py-4 rounded-2xl transition-all shadow-xl uppercase tracking-widest text-xs flex justify-center items-center gap-2"
+                            >
+                                <span>Activar Mi Beneficio 2x1</span>
+                            </button>
+                        </div>
+
+                        <!-- Confirmación de Éxito del Referido -->
+                        <div id="confirmacionCupon" class="hidden text-center py-4 bg-white/90 rounded-2xl border-2 border-movistarGreen animate__animated animate__fadeIn">
+                            <p class="text-movistarGreen font-black text-sm uppercase italic">¡Cupón Registrado!</p>
+                            <p class="text-[10px] text-gray-600 font-bold mt-1">El beneficio se aplicará al completar la portabilidad.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="cerrarModal()" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-500 font-black py-5 rounded-2xl transition-all uppercase tracking-widest text-xs">
+                    Entendido, finalizar
+                </button>
+            </div>
+        </div>
+    </div>
 
     <script>
+        // CONFIGURACIÓN: URL de tu Script de Google
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbziY84S_vAph7H_lQglTqULvWsh2d_3JcXs6CyFzZUMyNICsw1RkXjp6KcGniozwuXu/exec"; 
+        
+        let DN_ACTUAL = ""; // Guardar el número del cliente para vincular el referido
 
-        // =========================================================
-
-        // ¡IMPORTANTE! PEGA AQUÍ TU NUEVA URL DE APPS SCRIPT
-
-        // =========================================================
-
-        const API_URL = "https://script.google.com/macros/s/AKfycbyKoVTyeRXiraGY74CRI3SuXJfy--2egXlCjQpFmpJjZ9mYmZjhqNBN2mq5Z-TcZtyD/exec"; 
-
-
-
-        async function validarAlta() {
-
-            const inputDato = document.getElementById('datoCliente');
-
-            const valor = inputDato.value.trim();
-
+        // --- FUNCIÓN 1: VALIDAR ALTA Y OBTENER BENEFICIOS ---
+        async function procesarValidacion() {
+            const input = document.getElementById('inputIdentificador');
+            const valor = input.value.trim();
             const btn = document.getElementById('btnValidar');
-
-            const spinner = document.getElementById('spinner');
-
-            const btnText = btn.querySelector('span');
-
+            const errorBox = document.getElementById('msgError');
             
-
-            const mensajeContenedor = document.getElementById('mensajeContenedor');
-
-            const mensajeTexto = document.getElementById('mensajeTexto');
-
-            
-
-            // Ocultar mensaje previo
-
-            mensajeContenedor.classList.add('hidden');
-
-            mensajeContenedor.className = "mt-6 hidden rounded-lg p-4 text-center text-sm font-medium";
-
-
-
-            // Validación: El DN tiene 10 y el CURP tiene 18
-
-            if(valor.length !== 10 && valor.length !== 18) {
-
-                mostrarMensaje("Por favor, ingresa un número válido (10 dígitos) o un CURP (18 caracteres).", "error");
-
+            if (valor.length < 10) {
+                mostrarError("Dato muy corto. Ingresa Número o CURP.");
                 return;
-
             }
 
-
-
-            // Estado de carga (Loading)
-
+            errorBox.classList.add('hidden');
             btn.disabled = true;
-
-            btnText.textContent = "Buscando...";
-
-            spinner.classList.remove('hidden');
-
-
+            document.getElementById('labelValidar').textContent = "Procesando Alta...";
+            document.getElementById('spinner').classList.remove('hidden');
 
             try {
-
-                const response = await fetch(API_URL, {
-
+                const response = await fetch(WEB_APP_URL, {
                     method: 'POST',
-
-                    headers: { 'Content-Type': 'text/plain' }, 
-
-                    body: JSON.stringify({ valor: valor })
-
+                    body: JSON.stringify({ action: "validar", valor: valor })
                 });
-
-
 
                 const data = await response.json();
 
+                if (data.status === "success") {
+                    input.value = "";
+                    DN_ACTUAL = data.dn;
+                    lanzarModal(data);
+                } else {
+                    mostrarError(data.message);
+                }
+            } catch (e) {
+                mostrarError("Error de red. Intenta nuevamente.");
+            } finally {
+                btn.disabled = false;
+                document.getElementById('labelValidar').textContent = "Confirmar Mi Promoción";
+                document.getElementById('spinner').classList.add('hidden');
+            }
+        }
 
+        // --- FUNCIÓN 2: MOSTRAR MODAL CON DATOS DINÁMICOS ---
+        function lanzarModal(data) {
+            document.getElementById('nombreUsuario').textContent = `¡Hola, ${data.nombre}!`;
+            document.getElementById('promoNombre').textContent = data.promo.titulo.split(' - ')[0];
+            document.getElementById('promoPrecio').textContent = data.promo.titulo.split(' - ')[1] || "$--";
+            document.getElementById('promoVigencia').textContent = data.promo.dias;
 
-                // Manejo de UI según la respuesta
+            const contenedorLista = document.getElementById('listaBeneficios');
+            contenedorLista.innerHTML = "";
+            
+            const iconMap = {
+                bolt: '⚡', apps: '📱', star: '✨', phone: '📞',
+                infinity: '♾️', wifi: '🔥', check: '✅', share: '📡'
+            };
+
+            data.promo.lista.forEach((item, index) => {
+                const card = document.createElement('div');
+                const high = item.highlight;
+                card.className = `benefit-card flex items-center p-4 rounded-2xl gap-4 animate__animated animate__fadeInUp ${high ? 'bg-blue-50 border border-blue-100' : 'bg-gray-50'}`;
+                card.style.animationDelay = `${index * 0.1}s`;
+                
+                card.innerHTML = `
+                    <div class="w-12 h-12 rounded-xl ${high ? 'bg-gold shadow-md' : 'bg-white shadow-sm'} flex items-center justify-center flex-shrink-0">
+                        <span class="text-xl">${iconMap[item.icon] || '🔵'}</span>
+                    </div>
+                    <div class="text-left">
+                        <p class="text-sm font-black ${high ? 'text-movistarBlue' : 'text-movistarDark'} leading-tight">${item.txt}</p>
+                        ${high ? '<span class="text-[9px] font-bold text-goldDark uppercase italic">Exclusivo de tu Plan</span>' : '<span class="text-[9px] text-gray-400 font-bold uppercase">Incluido</span>'}
+                    </div>
+                `;
+                contenedorLista.appendChild(card);
+            });
+
+            // Reiniciar estado del cupón
+            document.getElementById('formReferido').classList.remove('hidden');
+            document.getElementById('confirmacionCupon').classList.add('hidden');
+            document.getElementById('inputReferido').value = "";
+
+            // Mostrar Modal con animación
+            const fondo = document.getElementById('modalFondo');
+            const modal = document.getElementById('modalContenedor');
+            fondo.classList.remove('hidden');
+            setTimeout(() => {
+                fondo.style.opacity = "1";
+                modal.classList.add('modal-active');
+            }, 10);
+        }
+
+        // --- FUNCIÓN 3: REGISTRAR REFERIDO (CUPÓN DORADO) ---
+        async function registrarReferido() {
+            const inputRef = document.getElementById('inputReferido');
+            const num = inputRef.value.trim();
+            const btn = document.getElementById('btnReferir');
+
+            if (num.length !== 10 || isNaN(num)) {
+                alert("Ingresa un número de 10 dígitos válido para la portabilidad.");
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = `<span>Registrando...</span>`;
+
+            try {
+                const response = await fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ 
+                        action: "referir", 
+                        dn_original: DN_ACTUAL, 
+                        referido: num 
+                    })
+                });
+
+                const data = await response.json();
 
                 if (data.status === "success") {
-
-                    mostrarMensaje(data.message, "success");
-
-                    inputDato.value = ""; // Limpiar campo
-
-                } else if (data.status === "info") {
-
-                    mostrarMensaje(data.message, "info");
-
+                    document.getElementById('formReferido').classList.add('hidden');
+                    document.getElementById('confirmacionCupon').classList.remove('hidden');
                 } else {
-
-                    mostrarMensaje(data.message, "error");
-
+                    alert(data.message);
+                    btn.disabled = false;
+                    btn.innerHTML = `<span>Activar Mi Beneficio 2x1</span>`;
                 }
-
-
-
-            } catch (error) {
-
-                console.error("Error:", error);
-
-                mostrarMensaje("Hubo un error de conexión con el servidor. Intenta de nuevo.", "error");
-
-            } finally {
-
-                // Restaurar botón
-
+            } catch (e) {
+                alert("Error al conectar. Verifica tu internet.");
                 btn.disabled = false;
-
-                btnText.textContent = "Confirmar Alta";
-
-                spinner.classList.add('hidden');
-
+                btn.innerHTML = `<span>Activar Mi Beneficio 2x1</span>`;
             }
-
         }
 
-
-
-        // Función para inyectar colores y mostrar el mensaje
-
-        function mostrarMensaje(texto, tipo) {
-
-            const contenedor = document.getElementById('mensajeContenedor');
-
-            const parrafo = document.getElementById('mensajeTexto');
-
-            
-
-            parrafo.textContent = texto;
-
-            contenedor.classList.remove('hidden');
-
-            
-
-            // Asignar colores de Tailwind según el tipo de mensaje
-
-            if (tipo === 'success') {
-
-                contenedor.classList.add('bg-green-50', 'text-green-700', 'border', 'border-green-200');
-
-            } else if (tipo === 'error') {
-
-                contenedor.classList.add('bg-red-50', 'text-red-700', 'border', 'border-red-200');
-
-            } else if (tipo === 'info') {
-
-                contenedor.classList.add('bg-blue-50', 'text-blue-700', 'border', 'border-blue-200');
-
-            }
-
+        function mostrarError(msg) {
+            const error = document.getElementById('msgError');
+            error.textContent = `⚠ ${msg}`;
+            error.classList.remove('hidden');
         }
 
+        function cerrarModal() {
+            const fondo = document.getElementById('modalFondo');
+            const modal = document.getElementById('modalContenedor');
+            modal.classList.remove('modal-active');
+            fondo.style.opacity = "0";
+            setTimeout(() => {
+                fondo.classList.add('hidden');
+                location.reload(); 
+            }, 500);
+        }
     </script>
-
 </body>
-
 </html>
