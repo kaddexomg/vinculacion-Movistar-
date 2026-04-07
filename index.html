@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movistar | Portal de Validación y Beneficios</title>
+    <title>Movistar | Portal de Beneficios Premium</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <script>
@@ -16,358 +16,314 @@
                         movistarGreen: '#5BC500',
                         movistarSky: '#F4F9FF',
                         gold: '#FFD700',
-                        goldDark: '#B8860B'
+                        goldDark: '#B8860B',
+                        platinum: '#E5E4E2'
                     },
                     borderRadius: {
-                        '3xl': '1.5rem',
                         '4xl': '2rem',
+                        '5xl': '3rem',
                     }
                 }
             }
         }
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Onest:wght@400;600;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Onest:wght@400;600;700;800;900&display=swap');
         
         body { 
             font-family: 'Onest', sans-serif; 
             background: #0B2739;
             overflow-x: hidden;
+            color: #0B2739;
         }
 
-        .main-gradient {
+        .main-bg {
             background: radial-gradient(circle at top right, #019DF4, #0B2739);
         }
 
-        /* Estilo del Cupón Dorado con animación de brillo */
         .golden-ticket {
             background: linear-gradient(135deg, #FFF8DC 0%, #FFD700 50%, #DAA520 100%);
+            border: 2px dashed #B8860B;
             position: relative;
             overflow: hidden;
-            border: 2px dashed #B8860B;
         }
         
-        .golden-ticket::before {
+        .golden-ticket::after {
             content: '';
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 60%);
-            animation: shineEffect 4s infinite linear;
-            pointer-events: none;
+            top: -100%;
+            left: -100%;
+            width: 300%;
+            height: 300%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.6), transparent);
+            transform: rotate(45deg);
+            animation: shine 5s infinite;
         }
 
-        @keyframes shineEffect { 
-            0% { transform: rotate(0deg); } 
-            100% { transform: rotate(360deg); } 
+        @keyframes shine {
+            0% { left: -100%; top: -100%; }
+            20% { left: 100%; top: 100%; }
+            100% { left: 100%; top: 100%; }
         }
 
-        /* Glassmorphism */
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(10px);
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        .benefit-card {
+        .step-inactive { display: none; }
+        
+        .btn-primary {
+            background: linear-gradient(to right, #019DF4, #0077B6);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .benefit-card:hover {
-            transform: translateX(8px);
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -5px rgba(1, 157, 244, 0.4);
         }
 
-        .modal-active {
-            transform: translateY(0) !important;
-            opacity: 1 !important;
+        .benefit-item {
+            transition: transform 0.2s ease;
         }
-
-        /* Custom Scrollbar */
-        #modalContainer::-webkit-scrollbar { width: 0px; }
+        .benefit-item:hover {
+            transform: scale(1.02);
+        }
     </style>
 </head>
-<body class="main-gradient min-h-screen flex items-center justify-center p-4">
+<body class="main-bg min-h-screen flex items-center justify-center p-4">
 
-    <!-- PANTALLA DE INICIO: VALIDACIÓN -->
-    <div id="loginView" class="animate__animated animate__fadeInUp max-w-md w-full">
-        <div class="glass-panel p-10 rounded-4xl shadow-2xl relative overflow-hidden">
-            
-            <!-- Logo y Cabecera -->
-            <div class="flex flex-col items-center mb-10">
-                <div class="flex items-end mb-2">
-                    <span class="text-4xl font-extrabold tracking-tighter text-movistarBlue">movistar</span>
-                    <div class="w-3 h-3 bg-movistarGreen rounded-full ml-1 mb-1 animate-pulse"></div>
+    <div class="w-full max-w-md">
+        
+        <!-- VISTA 1: VALIDACIÓN -->
+        <div id="viewStep1" class="glass-card rounded-5xl p-8 shadow-2xl animate__animated animate__fadeInUp">
+            <div class="text-center mb-10">
+                <div class="flex justify-center items-end gap-1 mb-2">
+                    <span class="text-4xl font-black text-movistarBlue tracking-tighter">movistar</span>
+                    <div class="w-3 h-3 bg-movistarGreen rounded-full mb-1 animate-pulse"></div>
                 </div>
-                <h1 class="text-xl font-black text-movistarDark italic tracking-tight">¡Días Movistar!</h1>
-                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.3em] mt-2">Validación de Alta Oficial</p>
+                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.4em]">Activation Portal v2.0</p>
             </div>
 
-            <!-- Formulario Principal -->
             <div class="space-y-6">
-                <div class="relative group">
-                    <label class="text-[10px] font-black text-movistarBlue uppercase tracking-widest ml-3 mb-1 block">Número DN o CURP</label>
-                    <input 
-                        type="text" 
-                        id="inputIdentificador" 
-                        placeholder="INGRESA TUS DATOS" 
-                        maxlength="18"
-                        class="w-full px-6 py-5 rounded-3xl bg-gray-50 border-2 border-transparent focus:border-movistarBlue focus:bg-white outline-none transition-all text-center uppercase text-xl font-black text-movistarDark shadow-inner"
-                    >
+                <div class="text-center">
+                    <h1 class="text-2xl font-black text-movistarDark italic leading-none">¡Confirma tu Alta!</h1>
+                    <p class="text-gray-500 text-xs mt-2 font-medium px-4">Ingresa tu número o CURP para activar tus beneficios exclusivos del flyer.</p>
                 </div>
 
-                <button 
-                    id="btnValidar" 
-                    onclick="procesarValidacion()"
-                    class="w-full bg-movistarBlue hover:bg-[#0088D6] text-white font-black py-5 rounded-3xl transition-all transform active:scale-95 shadow-xl shadow-movistarBlue/30 text-lg flex justify-center items-center gap-3"
-                >
-                    <span id="labelValidar">Confirmar Mi Promoción</span>
-                    <svg id="spinner" class="animate-spin h-5 w-5 text-white hidden" viewBox="0 0 24 24" fill="none">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
+                <div class="relative">
+                    <input type="text" id="userInput" placeholder="DN (10 DÍGITOS) O CURP" maxlength="18"
+                        class="w-full bg-gray-50 border-2 border-gray-100 focus:border-movistarBlue rounded-3xl py-5 px-6 text-center text-xl font-black text-movistarDark outline-none transition-all uppercase placeholder:text-gray-300">
+                </div>
+
+                <button onclick="validarAlta()" id="btnValidar" 
+                    class="btn-primary w-full text-white font-black py-5 rounded-3xl text-lg flex justify-center items-center gap-3">
+                    <span id="txtValidar">Ver Mis Beneficios</span>
+                    <div id="loaderValidar" class="hidden w-5 h-5 border-3 border-white/30 border-t-white rounded-full animate-spin"></div>
                 </button>
 
-                <p id="msgError" class="hidden animate__animated animate__shakeX text-center text-red-500 font-bold text-xs bg-red-50 p-3 rounded-xl border border-red-100"></p>
-            </div>
-
-            <!-- Footer Footer -->
-            <div class="mt-12 text-center">
-                <p class="text-[9px] text-gray-300 font-bold uppercase tracking-[0.4em]">Keyder GMT System • 2024</p>
+                <p id="errorMsg" class="hidden text-red-500 text-[11px] font-bold text-center bg-red-50 p-3 rounded-xl border border-red-100 italic"></p>
             </div>
         </div>
-    </div>
 
-    <!-- MODAL DE RESULTADOS, BENEFICIOS Y CUPÓN DORADO -->
-    <div id="modalFondo" class="fixed inset-0 z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4 bg-movistarDark/90 backdrop-blur-md transition-opacity duration-300 opacity-0">
-        <div id="modalContenedor" class="bg-white w-full max-w-md rounded-t-4xl sm:rounded-4xl overflow-hidden transform translate-y-full transition-all duration-500 shadow-2xl flex flex-col max-h-[95vh]">
-            
-            <!-- Encabezado de Éxito -->
-            <div class="bg-gradient-to-br from-movistarBlue to-[#006bb1] pt-12 pb-8 px-8 text-center text-white relative">
-                <div class="mx-auto w-20 h-20 bg-movistarGreen rounded-full border-8 border-white flex items-center justify-center shadow-xl mb-4 animate__animated animate__bounceIn">
-                    <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="4">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
-                    </svg>
+        <!-- VISTA 2: RESULTADOS Y BENEFICIOS DINÁMICOS -->
+        <div id="viewStep2" class="step-inactive glass-card rounded-5xl overflow-hidden shadow-2xl animate__animated animate__fadeInUp">
+            <div class="bg-gradient-to-br from-movistarBlue to-blue-700 p-8 text-center text-white">
+                <div class="w-16 h-16 bg-movistarGreen rounded-full border-4 border-white flex items-center justify-center mx-auto mb-3 shadow-lg scale-110">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path d="M5 13l4 4L19 7"></path></svg>
                 </div>
-                <h3 class="text-3xl font-black mb-1" id="nombreUsuario">¡Hola!</h3>
-                <p class="text-blue-100 text-[10px] font-bold uppercase tracking-widest opacity-80 italic">Validación de Alta Exitosa</p>
+                <h2 class="text-2xl font-black italic" id="userName">¡Bienvenido!</h2>
+                <p class="text-[10px] font-bold uppercase tracking-widest opacity-70">Tu línea está activa en sistema</p>
             </div>
 
-            <div class="p-8 overflow-y-auto" id="modalContainer">
-                <!-- Tarjeta del Plan Actual -->
-                <div class="mb-8 border-b border-gray-100 pb-6 flex justify-between items-center">
+            <div class="p-6">
+                <!-- Tarjeta de Plan -->
+                <div class="bg-movistarSky rounded-3xl p-5 border border-blue-50 flex justify-between items-center mb-6">
                     <div>
-                        <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-1">Tu Promoción Activa</span>
-                        <h4 class="text-2xl font-black text-movistarDark tracking-tighter" id="promoNombre">Cargando...</h4>
-                        <p class="text-movistarBlue font-black text-4xl mt-1" id="promoPrecio">---</p>
+                        <span class="text-[9px] font-black text-movistarBlue uppercase tracking-tighter block">Plan Detectado</span>
+                        <h3 class="text-xl font-black text-movistarDark" id="planTitle">---</h3>
                     </div>
-                    <div class="bg-movistarSky px-4 py-2 rounded-2xl border border-blue-100 text-center">
-                        <span class="block text-[8px] font-black text-movistarBlue uppercase">Vigencia</span>
-                        <span class="text-movistarBlue font-black text-lg" id="promoVigencia">---</span>
+                    <div class="text-right">
+                        <span class="text-[8px] font-bold text-gray-400 block uppercase">Vigencia</span>
+                        <span class="text-movistarBlue font-black text-sm" id="planDays">---</span>
                     </div>
                 </div>
 
-                <!-- Lista de Beneficios -->
-                <div class="text-left mb-4">
-                    <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Beneficios Incluidos:</span>
-                </div>
-                <div class="space-y-3 mb-10" id="listaBeneficios">
-                    <!-- Los beneficios se cargan dinámicamente -->
+                <!-- LISTA DINÁMICA DE BENEFICIOS -->
+                <div id="benefitsGrid" class="space-y-3 mb-6">
+                    <!-- Los beneficios se inyectan aquí -->
                 </div>
 
-                <!-- SECCIÓN: EL CUPÓN DORADO (SISTEMA DE REFERIDOS) -->
-                <div id="seccionCupon" class="golden-ticket rounded-3xl p-6 shadow-2xl mb-8 animate__animated animate__zoomIn animate__delay-1s">
+                <!-- CUPÓN DORADO (REFERIDO - COLUMNA K) -->
+                <div class="golden-ticket rounded-4xl p-6 shadow-xl mb-6 text-center">
                     <div class="relative z-10">
-                        <div class="flex items-center gap-3 mb-3">
-                            <span class="text-2xl">🎟️</span>
-                            <h4 class="text-xl font-black text-[#6B4E00] uppercase tracking-tighter italic">¡Cupón Dorado 2x1!</h4>
-                        </div>
-                        <p class="text-[#8B6508] text-sm font-bold leading-tight mb-5">
-                            ¡Ganaste! Si refieres un número para portabilidad ahora mismo, <span class="text-black font-black">ambas líneas recibirán el beneficio 2x1</span> por 12 meses.
+                        <h4 class="text-lg font-black text-goldDark italic uppercase tracking-tighter mb-1">🎟️ ¡Cupón Dorado Ganado!</h4>
+                        <p class="text-[11px] font-bold text-yellow-900 leading-tight mb-4 px-2">
+                            Refiere un número para portabilidad y activa <span class="bg-white/40 px-1 rounded">2x1 POR 12 MESES</span> en ambas líneas.
                         </p>
                         
-                        <div id="formReferido" class="space-y-3">
-                            <input 
-                                type="text" 
-                                id="inputReferido" 
-                                placeholder="NÚMERO A PORTAR (10 DÍGITOS)" 
-                                maxlength="10"
-                                class="w-full px-5 py-4 rounded-2xl bg-white border-2 border-yellow-400 focus:border-yellow-600 outline-none text-center font-black text-movistarDark shadow-inner placeholder:text-gray-300 placeholder:font-normal"
-                            >
-                            <button 
-                                onclick="registrarReferido()" 
-                                id="btnReferir"
-                                class="w-full bg-movistarDark hover:bg-black text-white font-black py-4 rounded-2xl transition-all shadow-xl uppercase tracking-widest text-xs flex justify-center items-center gap-2"
-                            >
-                                <span>Activar Mi Beneficio 2x1</span>
+                        <div id="referidoContainer">
+                            <input type="text" id="referidoInput" placeholder="NÚMERO REFERIDO (10 DÍGITOS)" maxlength="10"
+                                class="w-full py-4 px-4 rounded-2xl bg-white/90 border-2 border-gold outline-none text-center font-black text-movistarDark mb-3 shadow-inner placeholder:text-gray-300">
+                            
+                            <button onclick="registrarReferido()" id="btnReferido"
+                                class="w-full bg-movistarDark text-white font-black py-4 rounded-2xl text-[11px] uppercase tracking-[0.2em] shadow-lg hover:bg-black transition-all active:scale-95">
+                                Activar Beneficio 2x1
                             </button>
                         </div>
 
-                        <!-- Confirmación de Éxito del Referido -->
-                        <div id="confirmacionCupon" class="hidden text-center py-4 bg-white/90 rounded-2xl border-2 border-movistarGreen animate__animated animate__fadeIn">
-                            <p class="text-movistarGreen font-black text-sm uppercase italic">¡Cupón Registrado!</p>
-                            <p class="text-[10px] text-gray-600 font-bold mt-1">El beneficio se aplicará al completar la portabilidad.</p>
+                        <div id="referidoExito" class="hidden animate__animated animate__bounceIn">
+                            <div class="bg-white/80 py-3 rounded-2xl border-2 border-movistarGreen">
+                                <p class="text-movistarGreen font-black text-xs uppercase italic">¡Registro Exitoso!</p>
+                                <p class="text-[9px] text-gray-500 font-bold">Redirigiendo en <span id="timer">5</span>...</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <button onclick="cerrarModal()" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-500 font-black py-5 rounded-2xl transition-all uppercase tracking-widest text-xs">
-                    Entendido, finalizar
-                </button>
             </div>
         </div>
+
     </div>
 
     <script>
-        // CONFIGURACIÓN: URL de tu Script de Google
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbziY84S_vAph7H_lQglTqULvWsh2d_3JcXs6CyFzZUMyNICsw1RkXjp6KcGniozwuXu/exec"; 
-        
-        let DN_ACTUAL = ""; // Guardar el número del cliente para vincular el referido
+        let CLIENTE_DN = "";
 
-        // --- FUNCIÓN 1: VALIDAR ALTA Y OBTENER BENEFICIOS ---
-        async function procesarValidacion() {
-            const input = document.getElementById('inputIdentificador');
-            const valor = input.value.trim();
+        async function validarAlta() {
+            const val = document.getElementById('userInput').value.trim();
             const btn = document.getElementById('btnValidar');
-            const errorBox = document.getElementById('msgError');
-            
-            if (valor.length < 10) {
-                mostrarError("Dato muy corto. Ingresa Número o CURP.");
+            const txt = document.getElementById('txtValidar');
+            const loader = document.getElementById('loaderValidar');
+            const error = document.getElementById('errorMsg');
+
+            if (val.length < 10) {
+                error.innerText = "⚠ Ingresa un número o CURP válido.";
+                error.classList.remove('hidden');
                 return;
             }
 
-            errorBox.classList.add('hidden');
+            error.classList.add('hidden');
             btn.disabled = true;
-            document.getElementById('labelValidar').textContent = "Procesando Alta...";
-            document.getElementById('spinner').classList.remove('hidden');
+            txt.innerText = "Validando...";
+            loader.classList.remove('hidden');
 
             try {
-                const response = await fetch(WEB_APP_URL, {
+                const res = await fetch(WEB_APP_URL, {
                     method: 'POST',
-                    body: JSON.stringify({ action: "validar", valor: valor })
+                    body: JSON.stringify({ action: "validar", valor: val })
                 });
-
-                const data = await response.json();
+                const data = await res.json();
 
                 if (data.status === "success") {
-                    input.value = "";
-                    DN_ACTUAL = data.dn;
-                    lanzarModal(data);
+                    CLIENTE_DN = data.dn;
+                    mostrarPaso2(data);
                 } else {
-                    mostrarError(data.message);
+                    error.innerText = "⚠ " + data.message;
+                    error.classList.remove('hidden');
                 }
             } catch (e) {
-                mostrarError("Error de red. Intenta nuevamente.");
+                error.innerText = "⚠ Error de conexión.";
+                error.classList.remove('hidden');
             } finally {
                 btn.disabled = false;
-                document.getElementById('labelValidar').textContent = "Confirmar Mi Promoción";
-                document.getElementById('spinner').classList.add('hidden');
+                txt.innerText = "Ver Mis Beneficios";
+                loader.classList.add('hidden');
             }
         }
 
-        // --- FUNCIÓN 2: MOSTRAR MODAL CON DATOS DINÁMICOS ---
-        function lanzarModal(data) {
-            document.getElementById('nombreUsuario').textContent = `¡Hola, ${data.nombre}!`;
-            document.getElementById('promoNombre').textContent = data.promo.titulo.split(' - ')[0];
-            document.getElementById('promoPrecio').textContent = data.promo.titulo.split(' - ')[1] || "$--";
-            document.getElementById('promoVigencia').textContent = data.promo.dias;
-
-            const contenedorLista = document.getElementById('listaBeneficios');
-            contenedorLista.innerHTML = "";
+        function mostrarPaso2(data) {
+            document.getElementById('viewStep1').classList.add('step-inactive');
+            document.getElementById('viewStep2').classList.remove('step-inactive');
             
-            const iconMap = {
-                bolt: '⚡', apps: '📱', star: '✨', phone: '📞',
-                infinity: '♾️', wifi: '🔥', check: '✅', share: '📡'
-            };
+            document.getElementById('userName').innerText = `¡Hola, ${data.nombre}!`;
+            document.getElementById('planTitle').innerText = data.promo.titulo.split(' - ')[0];
+            document.getElementById('planDays').innerText = data.promo.dias;
 
-            data.promo.lista.forEach((item, index) => {
-                const card = document.createElement('div');
-                const high = item.highlight;
-                card.className = `benefit-card flex items-center p-4 rounded-2xl gap-4 animate__animated animate__fadeInUp ${high ? 'bg-blue-50 border border-blue-100' : 'bg-gray-50'}`;
-                card.style.animationDelay = `${index * 0.1}s`;
-                
-                card.innerHTML = `
-                    <div class="w-12 h-12 rounded-xl ${high ? 'bg-gold shadow-md' : 'bg-white shadow-sm'} flex items-center justify-center flex-shrink-0">
-                        <span class="text-xl">${iconMap[item.icon] || '🔵'}</span>
-                    </div>
-                    <div class="text-left">
-                        <p class="text-sm font-black ${high ? 'text-movistarBlue' : 'text-movistarDark'} leading-tight">${item.txt}</p>
-                        ${high ? '<span class="text-[9px] font-bold text-goldDark uppercase italic">Exclusivo de tu Plan</span>' : '<span class="text-[9px] text-gray-400 font-bold uppercase">Incluido</span>'}
-                    </div>
-                `;
-                contenedorLista.appendChild(card);
-            });
-
-            // Reiniciar estado del cupón
-            document.getElementById('formReferido').classList.remove('hidden');
-            document.getElementById('confirmacionCupon').classList.add('hidden');
-            document.getElementById('inputReferido').value = "";
-
-            // Mostrar Modal con animación
-            const fondo = document.getElementById('modalFondo');
-            const modal = document.getElementById('modalContenedor');
-            fondo.classList.remove('hidden');
-            setTimeout(() => {
-                fondo.style.opacity = "1";
-                modal.classList.add('modal-active');
-            }, 10);
+            renderizarBeneficios(data.promo.titulo);
         }
 
-        // --- FUNCIÓN 3: REGISTRAR REFERIDO (CUPÓN DORADO) ---
-        async function registrarReferido() {
-            const inputRef = document.getElementById('inputReferido');
-            const num = inputRef.value.trim();
-            const btn = document.getElementById('btnReferir');
+        function renderizarBeneficios(titulo) {
+            const grid = document.getElementById('benefitsGrid');
+            grid.innerHTML = "";
+            
+            // Definición de beneficios por palabras clave en el título de la promoción
+            let beneficios = [
+                { icon: "🌐", text: "Navegación Libre", desc: "Datos de alta velocidad" },
+                { icon: "📱", text: "Redes Sociales", desc: "WhatsApp, FB, IG e X" },
+                { icon: "📞", text: "Llamadas y SMS", desc: "Ilimitados en México/USA" }
+            ];
 
-            if (num.length !== 10 || isNaN(num)) {
-                alert("Ingresa un número de 10 dígitos válido para la portabilidad.");
+            if (titulo.includes("50")) {
+                beneficios.push({ icon: "⚡", text: "Bono 5GB", desc: "Por portabilidad exitosa", highlight: true });
+            } else if (titulo.includes("100")) {
+                beneficios.push({ icon: "🚀", text: "Bono 10GB", desc: "Velocidad máxima 5G", highlight: true });
+            }
+
+            beneficios.forEach(b => {
+                const item = document.createElement('div');
+                item.className = `benefit-item flex items-center p-3 rounded-2xl ${b.highlight ? 'bg-blue-50 border border-blue-200 shadow-sm' : 'bg-gray-50 border border-gray-100'}`;
+                item.innerHTML = `
+                    <div class="w-10 h-10 flex items-center justify-center text-xl bg-white rounded-xl shadow-sm mr-3">${b.icon}</div>
+                    <div class="text-left">
+                        <p class="text-xs font-black text-movistarDark leading-tight">${b.text}</p>
+                        <p class="text-[9px] text-gray-500 font-bold uppercase">${b.desc}</p>
+                    </div>
+                `;
+                grid.appendChild(item);
+            });
+        }
+
+        async function registrarReferido() {
+            const numRef = document.getElementById('referidoInput').value.trim();
+            const btn = document.getElementById('btnReferido');
+
+            if (numRef.length !== 10 || isNaN(numRef)) {
+                alert("Por favor, ingresa un número de 10 dígitos válido.");
                 return;
             }
 
             btn.disabled = true;
-            btn.innerHTML = `<span>Registrando...</span>`;
+            btn.innerText = "GUARDANDO...";
 
             try {
-                const response = await fetch(WEB_APP_URL, {
+                const res = await fetch(WEB_APP_URL, {
                     method: 'POST',
                     body: JSON.stringify({ 
                         action: "referir", 
-                        dn_original: DN_ACTUAL, 
-                        referido: num 
+                        dn_original: CLIENTE_DN, 
+                        referido: numRef 
                     })
                 });
-
-                const data = await response.json();
+                const data = await res.json();
 
                 if (data.status === "success") {
-                    document.getElementById('formReferido').classList.add('hidden');
-                    document.getElementById('confirmacionCupon').classList.remove('hidden');
+                    document.getElementById('referidoContainer').classList.add('hidden');
+                    document.getElementById('referidoExito').classList.remove('hidden');
+                    iniciarRedireccion();
                 } else {
-                    alert(data.message);
+                    alert("Error: " + data.message);
                     btn.disabled = false;
-                    btn.innerHTML = `<span>Activar Mi Beneficio 2x1</span>`;
+                    btn.innerText = "Activar Beneficio 2x1";
                 }
             } catch (e) {
-                alert("Error al conectar. Verifica tu internet.");
+                alert("Error al guardar.");
                 btn.disabled = false;
-                btn.innerHTML = `<span>Activar Mi Beneficio 2x1</span>`;
+                btn.innerText = "Activar Beneficio 2x1";
             }
         }
 
-        function mostrarError(msg) {
-            const error = document.getElementById('msgError');
-            error.textContent = `⚠ ${msg}`;
-            error.classList.remove('hidden');
-        }
-
-        function cerrarModal() {
-            const fondo = document.getElementById('modalFondo');
-            const modal = document.getElementById('modalContenedor');
-            modal.classList.remove('modal-active');
-            fondo.style.opacity = "0";
-            setTimeout(() => {
-                fondo.classList.add('hidden');
-                location.reload(); 
-            }, 500);
+        function iniciarRedireccion() {
+            let tiempo = 5;
+            const timerSpan = document.getElementById('timer');
+            const intervalo = setInterval(() => {
+                tiempo--;
+                timerSpan.innerText = tiempo;
+                if (tiempo <= 0) {
+                    clearInterval(intervalo);
+                    window.location.href = "https://www.movistar.com.mx"; 
+                }
+            }, 1000);
         }
     </script>
 </body>
